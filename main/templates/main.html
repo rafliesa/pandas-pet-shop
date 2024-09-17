@@ -6,9 +6,42 @@
     <title>Document</title>
 </head>
 <body>
+    {% extends 'base.html' %}
+    {% block content %}
     <h1>{{nama_aplikasi}}</h1>
     <br>
     <h5>{{nama}}</h5>
     <h5>{{class}}</h5>
+
+{% if not items %}
+<p>Belum ada item.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Nama</th>
+    <th>Harga</th>
+    <th>Deskripsi</th>
+    <th>Animal Type</th>
+    <th>Stock</th>
+  </tr>
+
+  {% for item in items %}
+  <tr>
+    <td>{{item.name}}</td>
+    <td>{{item.price}}</td>
+    <td>{{item.description}}</td>
+    <td>{{item.animal_type}}</td>
+    <td>{{item.stock}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:add_item' %}">
+  <button>Add New Item</button>
+</a>
+    {% endblock content %}
 </body>
 </html>
