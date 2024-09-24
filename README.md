@@ -1,7 +1,7 @@
 LINK PWS : http://muhammad-rafli33-pandaspetshop.pbp.cs.ui.ac.id/
 
 
-# TUGAS 1
+# TUGAS 2
 
 ## 1.) Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 jawab:
@@ -56,7 +56,7 @@ jawab:
 	Karena Django menyediakan cara untuk berinteraksi dengan database relasional menggunakan objek Python. 
 
 
-# TUGAS 2
+# TUGAS 3
 
 ## 1.) Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 	Data delivery dalam pengimplementasian sebuah platform diperlukan sebagai komunikasi antara backend, frontend, dan database sehingga memungkinkan penerimaan, presentasi, dan pengolahan data pada masing-masing stack.
@@ -93,3 +93,94 @@ jawab:
 ![alt text](postmanjson.png)
 ![alt text](postmanxmlbyid.png)
 ![alt text](postmanjsonbyid.png)
+
+# Tugas 4
+
+## 1.) Apa perbedaan antara HttpResponseRedirect() dan redirect() ?
+	Perbedaannya terdapat pada argumen pertamanya. redirect() lebih fleksibel dibandingkan dengan
+	HttpResponseRedirect() yang hanya bisa diisi oleh url, sedangkan argumen pertama redirect() dapat diisi
+	oleh model, view, atau url. 
+
+## 2.) Jelaskan cara kerja penghubungan model Product dengan User!
+	Yaitu dengan menambahkan Foreign Key pada model Product yang akan mengarah ke User.
+	Potongan code:
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	argumen pertama berfungsi untuk mengarahkan ke User.
+	argumen kedua berfungsi untuk memberi kondisi jika pengguna dihapus, 
+	semua produk yang terkait dengan pengguna tersebut juga akan dihapus.
+
+## 3.) Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+	####Authentication
+	-> Memverifikasi identitas pengguna, contohnya login.
+	####Authorization 
+	- > Memeriksa apa saja yang boleh dilakukan pengguna, contohnya admin dapat melakukan suntingan sedangkan pengguna biasa tidak.
+
+	####Saat pengguna login, kedua proses tersebut terjadi.
+	
+	####Proses autentikasi
+	1. Pengguna memasukkan identitas di halaman login.
+	2. Sistem mencocokkan identitas tersebut dengan data pengguna yang tersimpan dalam database.
+	3. Jika cocok, pengguna berhasil masuk dan Django membuat sesi untuk pengguna tersebut.
+	4. Jika tidak cocok, sistem akan meminta pengguna untuk memasukan kembali identitas yang sesuai.
+
+	####Proses otorisasi
+	1. Setelah autentikasi berhasil, pengguna dapat meminta akses ke berbagai halaman atau fitur.
+	2. Django memeriksa hak akses pengguna terhadap permintaan akses terhadap suatu halaman atau fitur.
+	3. Jika pengguna memiliki otorisasi yang tepat, mereka diperbolehkan untuk mengakses halaman atau fitur tersebut.
+
+	####Implementasi autentikasi di Django
+	1.) User melakukan submisi form kredensialnya, biasanya username dan password.
+	2.) View melakukan autentikasi dengan fungsi authenticate() yang akan mengecek submisi form pengguna pada database.
+	3.) Jika sesuai, maka Django akan membuat sesi untuk pengguna tersebut.
+
+	####Implementasi otorisasi di Django
+	1.) Ketika membuat User, Django secara otomatis menambahkan perizinan untuk melakukan sesuatu.
+	2.) Dengan Grouping. Grouping mengelompokan User ke dalam kelompok tertentu dengan perizinan tertentu.
+	3.) Mengecek perizinan pada views dengan menambah dekorator @permission_required
+	
+## 4.) Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+	Django mengingat pengguna yang telah login dengan menggunakan cookies dan session. Cookies dan session dapat membuat http yang stateless memiliki holding state. Django tidak menyimpan informasi secara langsung pada cookies dengan alasan keamanan. Cookies pada django hanya menyimpan rangkaian token (sessionid) yang akan dipetakan ke database server yang mana database tersebut menyimpan semua informasi pengguna.
+	
+	Kegunaan lain dari cookies adalah:
+	1. Menyimpan preferensi pengguna
+	2. Melacak aktivitas pengguna
+
+	Tidak semua cookies aman digunakan. Ciri-ciri cookies yang tidak aman adalah tidak menggunakan tokenizer. Dengan kata lain, informasi langsung disimpan pada cookies.
+
+## 5.) Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+	####Membuat registrasi
+	1.) Mengimpor UserCreationForm untuk membuat form registrasi pengguna.
+	2.) Membuat fungsi dan form registrasi pada views.py dengan class bawaan Django UserCreationForm. Form tersebut dimasukan input user pada request.POST lalu melakukan validasi dengan method is_valid(). Jika form valid, simpan form dan redirect ke view login.
+	3.) Membuat template html untuk registrasi yang akan dirender oleh fungsi yang sebelumnya telah dibuat.
+	4.) Melakukan routing registrasi tadi ke url.py direktori main untuk menambahkan path.
+
+	####Membuat login
+	1.) Mengimpor fungsi authenticate, login yang berguna untuk melakukan autentikasi dan login.
+	2.) Membuat fungsi dan form autentikasi untuk login dengan class bawaan Django AuthenticationForm. AuthenticationForm akan menerima submisi user lalu validasi dengan method is_valid(). Jika valid, maka panggil fungsi login() dengan parameter user yang didapat dari submisi form. Lalu lakukan redirect ke view main.
+	3.) Membuat template html untuk login yang akan dirender oleh fungsi yang sebelumnya dibuat.
+	4.) Melakukan routing login tadi ke url.py direktori main untuk menambahkan path.
+
+	####Membuat logout
+	1.) Mengimpor fungsi logout.
+	2.) Membuat fungsi untuk logout yang akan memanggil fungsi logout. Pemanggilan fungsi logout akan menghapus sesi pengguna yang masuk. Lalu redirect ke view login.
+	3.) Menambahkan tombol logout pada view main.
+	4.) Melakukan routing logout tadi ke url.py direktori main untuk menambahkan path.
+
+	####Menghubungkan model Product dengan User.
+	1.) Mengimpor class User yang telah didefinisikan Django.
+	2.) Tambahkan variabel user pada Product dengan value berupa foreign key dari user untuk menandai bahwa product tersebut terhubung ke suatu User dengan key tertentu.
+	3.) Ubah view untuk menambahkan item sehingga item yang ditambahkan diasosiasikan dengan User yang didapat dari user yang sedang melakukan request.
+	4.) Lakukan migrasi pada model.
+
+	####Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+	1.) Mengimpor datetime serta fungsi reverse dan class HttpResponseRedirect dari Django.
+	2.) Pada fungsi yang mengatur login, atur cookie last_login menjadi waktu tepat pada saat login dengan libary datetime.
+	3.) Ubah value dari dictionary context dengan key 'nama' menjadi nama dari user yang sedang login dari request.
+	4.) Pada dictionary context, tambahkan key last_login dengan value cookies last_login yang telah ditambahkan pada tahap 2.
+	5.) Pada fungsi yang mengatur logout, delete cookie last_login.
+	6.) Tambahkan template variable pada view main yang menampilkan last login user dengan mengambil datanya dari key yang telah ditambahkan pada step 4.
+
+	####Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+	1.) Jalankan server django.
+	2.) Buatlah 2 akun.
+	3.) Tambahkan 3 entry untuk masing-masing akun.

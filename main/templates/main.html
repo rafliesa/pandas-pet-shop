@@ -42,6 +42,10 @@
 <a href="{% url 'main:add_item' %}">
   <button>Add New Item</button>
 </a>
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+<h5>Sesi terakhir login: {{last_login}}</h5>`
     {% endblock content %}
 </body>
 </html>
