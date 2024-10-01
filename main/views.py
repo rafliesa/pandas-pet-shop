@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from main.forms import ItemForm
 from main.models import Item
@@ -8,7 +9,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -29,9 +29,9 @@ def show_main(request):
 
 
 def add_item(request):
-    form = ItemForm(request.POST or None)
-
+    form = ItemForm(request.POST, request.FILES or None)
     if form.is_valid() and request.method == "POST" :
+
         item = form.save(commit=False)
         item.user = request.user
         item.save()
@@ -40,6 +40,32 @@ def add_item(request):
     context = {'form': form}
     return render(request, "add_item.html", context)
 
+
+def edit_item(request, id):
+    item = Item.objects.get(pk=id)
+
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('main:show_main')
+    else:
+        form = ItemForm(instance=item)
+
+    context = {'form':form}
+    return render(request,"edit_item.html",context)
+
+def delete_item(request, id) :
+    item = Item.objects.get(pk = id)
+    item.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def view_item(request, id) :
+    item = Item.objects.get(pk=id)
+    context = {
+        'item' : item,
+    }
+    return render(request, 'view_item.html', context)
 
 def show_xml(request):
     data = Item.objects.all()
@@ -89,3 +115,4 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+

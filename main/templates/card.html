@@ -1,0 +1,36 @@
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/card.css' %}">
+<div class="card">
+    <div class="header">
+        <div class="name">
+            <a href="{% url 'main:view_item' item.pk %}">
+                {{ item.name }}
+            </a>
+        </div>
+    </div>
+    <a href="{% url 'main:view_item' item.pk %}">
+        <div class="kontenerGambar">
+            {% if item.photo %}
+            <img src="{{ item.photo.url }}">
+            {% else %}
+            <p>No image available</p>
+            {% endif %}
+        </div>
+    </a>
+    <div>
+        <p class="price">
+            Rp{{ item.price }}
+        </p>
+        <p class="stock">
+            Stock: {{ item.stock }}
+        </p>
+        <div class="buttons">
+            <a href="{% url 'main:edit_item' item.pk %}" class="ref">
+                <button class="edit-button">Edit</button>
+            </a>
+            <a href="{% url 'main:delete_item' item.pk  %}" class="ref">
+                <button class="delete-button">Delete</button>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<link rel="stylesheet" href="{% static 'css/view_item.css' %}">
+<title>{{ item.name }}</title>
+{% endblock meta %}
+{% block content %}
+{% include 'navbar.html' %}
+<body class="flex flex-col min-h-screen bg-gray-100">
+    <div class="border">
+        <div class="name">
+            {{ item.name }}
+        </div>
+        <div class="kontenerGambar">
+            {% if item.photo %}
+            <img src="{{ item.photo.url }}">
+            {% else %}
+            <p>No image available</p>
+            {% endif %}
+        </div>
+        <div class="deskripsi">
+            <p>{{ item.description }}</p>
+        </div>
+    </div>
+</body>
+
+{% endblock content %}

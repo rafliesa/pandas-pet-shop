@@ -1,0 +1,8 @@
+#submit{
+    background-color: wheat;
+    transition: opacity 0.3s ease;
+}
+
+#submit:hover{
+    opacity: 80%;
+}

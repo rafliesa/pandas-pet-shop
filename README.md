@@ -180,3 +180,91 @@ Tidak semua cookies aman digunakan. Ciri-ciri cookies yang tidak aman adalah tid
 1. Jalankan server django.
 2. Buatlah 2 akun.
 3. Tambahkan 3 entry untuk masing-masing akun.
+
+
+# Tugas 5
+
+## 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+1. Inline style, yaitu css yang langsung diterapkan di dalam tag html dengan menggunakan atribut "style".
+2. Internal style sheets, yaitu css yang berada pada tag head file html.
+3. External style sheets, yaitu css yang berada pada file terpisah dengan file html.
+4. Browser default, yaitu css bawaan dari browser.
+
+Pada internal style sheets maupun external style sheets, pemgambilan tersebut memiliki prioritas:
+1. ID Selector, permulaannya diawali dengan "#"
+2. Class atau Pseudo-class selectors, yang permulaannya diawali dengan "." (titik). untuk pseudo-class, setelah nama class diberi tanda titik 2, lalu nama pseudo-classnya.
+3. Type/element, yaitu langsung menggunakan nama tag HTML
+4. Universal selector, yaitu dengan menggunakan tanda "*" dengan arti memilih semua elemen.
+
+## 2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+Agar pengaksesan aplikasi web tersebut memiliki pengalaman pengguna yang sama pada setiap perangkat.
+Yang sudah -> Scele / scele.cs.ui.ac.id
+Yang belum -> SIAK-NG / academic.ui.ac.id
+
+## 3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+#### Margin
+Margin adalah ruang yang berada di luar element, cara mengimplementasikannya adalah dengan menggunakan property margin dan himpunannya.
+
+Contoh:
+.foo {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-inline: 5px;
+}
+
+Dengan styling seperti itu, kita membuat ruang sebesar 10px di atas foo, 15px di bawah foo, 5px di kanan dan kiri foo. Jika kita ingin membuat ruang dengan besar yang sama di setiap sisi, kita dapat menggunakan "margin: npx;".
+
+#### Border
+Border adalah batas dari element html, cara mengimplementasikannya adalah dengan menggunakan property border dan himpunannya.
+Contoh, jika ingin menebalkan border dari suatu html sebesar 2px kita dapat melakukan:
+
+.foo {
+    border: 2px solid;
+}
+
+#### Padding
+Padding adalah ruang di antara isi dari element dengan border element, cara mengimplementasikannya adalah dengan menggunakan property padding dan himpunannya.
+Contoh, jika ingin memberikan jarak antara border dengan isi element sebesar 20px, kita dapat melakukan:
+
+.foo {
+    padding: 20px;
+}
+
+Dengan styling seperti itu, pada setiap sisi konten dengan border memiliki jarak sebesar 20px. Sama halnya dengan margin, jika kita ingin memberikan ruang pada salah satu sisi saja, kita dapat menggunakan padding-top, padding-bottom, padding-left, atau padding-right.
+
+## 4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+#### Flex box
+Flexbox adalah layout model css yang memungkinkan layout menjadi lebih responsif dan efisien. Flexbox memudahkan pengaturan ruang di antara elemen dalam suatu kontainer dan mengelola ukuran serta penempatan element tersebut.
+
+##### Konsep Flex box
+
+Flex container: Element yang berisi satu atau lebih flex items. Untuk mendefinisikan sebuah elemen sebagai flex container, Kita dapat menggunakan properti CSS display: flex; atau display: inline-flex;.
+
+Flex items: Element yang berada di dalam flex container. Setiap elemen di dalam flex container secara otomatis menjadi flex item.
+
+#### Grid
+Grid adalah layout model css yang memiliki konsep baris dan kolom. Hal ini memungkinkan pengembang memiliki kontrol penuh atas penempatan element html. 
+
+##### Konsep Grid
+Grid Container: Elemen yang menjadi wadah (container) untuk grid items. Elemen didefinisikan sebagai grid container menggunakan properti display: grid; atau display: inline-grid;.
+
+Grid Items: Elemen-elemen yang berada di dalam grid container. Elemen ini otomatis menjadi grid items setelah grid container didefinisikan.
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+#### Implementasikan fungsi untuk menghapus dan mengedit product.
+Untuk melakukan checklist ini, saya mendefinisikan fungsi yang mengatur view masing-masing. Untuk fitur mengedit, saya menggunakan form item (product) yang saya implementasikan sebagai child class dari form bawaan django. Form tersebut akan dikonstruksi dengan parameter item yang diambil bedasarkan primary keynya. Setelah itu saya membuat template htmlnya dengan menggunakan atribut form yang akan diisi dengan form yang telah saya definisikan sebelumnya. 
+Untuk fitur hapus, cukup ambil item bedasarkan primary key lalu lakukan method delete. Setelah itu, routing kedua views tersebut ke urls.py direktori main.
+
+#### Hal-hal yang berkaitan dengan CSS
+Saya melakukan checklist ini dengan GSGS (Google sana Gooogle sini). Jika memungkinkan saya menggunakan tailwind, jika tidak saya menggunakan css external. Untuk menjaga agar web tetap responsif, saya menghindari penggunaan satuan px dengan menggunakan satuan vw atau vh.
+
+#### Membuat card beserta tombol untuk edit dan hapus
+Saya membuat file html dinamis terpisah khusus untuk card saja. Pada berkas html tersebut saya menggunakan div nesting yang layoutnya diatur dengan flexbox. Pada card tersebut, saya tambahkan detail item dengan menggunakan html dinamis django yang memungkinkan penggunaan variable yang merujuk ke item yang diinginkan. Untuk tombol edit dan hapus, saya menggunakan tag hyperlink yang akan merujuk ke views masing-masing untuk edit atau hapus. Setelah itu dapat dilakukan *styling* dengan css.
+
+Setelah itu saya melakukan iterasi items yang telah ditambahkan ke dalam berkas main.html sehingga akan memunculkan item-item yang telah ditambahkan. Apabila items masih kosong, cetak pesan khusus.
+
+#### Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+Pertama, saya membuat file navbar.html pada direktori root/templates/. Setelah itu, saya mengimplementasikan navbar dengan tag "nav" yang akan diisi dengan berbagai element div untuk shortcut yang sesuai dengan kebutuhan. Untuk membuatnya menjadi resposnif, saya menggunakan tailwind untuk menambahkan properti tertentu yang bisa diletakan langsung di dalam atribut class. Salah satu propertinya adalah "hidden md:flex items-center" yang akan menyembuyikan elemen jika ukuran layar dibawah ukuran medium (768px). Kebalikan dari hal tersebut, saya juga membuat hamburger button yang hanya akan munucul jika ukuran layar dibawah ukuran medium. Jika ditekan, hamburger button tersebut akan menampilkan shortcut dalam bentuk stack.
+
+Untuk menambahkan navbar tersebut ke tiap template yang memerlukannya, saya menambahkan templating {% include 'navbar.html' %}.

@@ -1,0 +1,8 @@
+#addItem{
+    background-color: wheat;
+    transition: opacity 0.3s ease;
+}
+
+#addItem:hover{
+    opacity: 80%;
+}

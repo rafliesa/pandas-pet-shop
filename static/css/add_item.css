@@ -1,0 +1,23 @@
+#submit{
+    background-color: wheat;
+    transition: opacity 0.3s ease;
+    width: 7vw;
+}
+
+#submit:hover{
+    opacity: 80%;
+}
+
+@media (max-width: 768px) {
+    #addItem {
+        font-size: 0.9em;
+        padding: 10px 16px; 
+    }
+}
+
+@media (max-width: 480px) {
+    #addItem {
+        font-size: 0.8em; 
+        padding: 8px 12px; 
+    }
+}

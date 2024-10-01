@@ -1,0 +1,8 @@
+#login{
+    background-color: wheat;
+    transition: opacity 0.3s ease;
+}
+
+#login:hover{
+    opacity: 80%;
+}
