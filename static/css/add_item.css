@@ -21,13 +21,3 @@
         padding: 8px 12px; 
     }
 }
-
-.add_item{
-    background-color: wheat;
-    transition: opacity 0.3s ease;
-    width: 200px;   
-}
-
-#addItem:hover{
-    opacity: 80%;
-}
