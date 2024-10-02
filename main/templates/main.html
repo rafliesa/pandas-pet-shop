@@ -12,9 +12,12 @@
 </div>
     <div class="px-3 mb-4">
     </div>
-    <div class="flex justify-end mb-6 absolute">
-        <a href="{% url 'main:add_item' %}" class=" text-black font-bold py-2 px-4 rounded-lg " id="addItem">
-            Add New Item
+    <div class="flex justify-evenly mb-6 absolute">
+        <div>
+            <h2 class="font-bold px-3 py-2 mx-2 rounded-lg text-1rem">Welcome, {{user.username}}</h2>
+        </div>
+        <a href="{% url 'main:add_item' %}" class=" text-black font-bold py-2 px-4 rounded-lg" id="addItem">
+            +
         </a>
     </div>
     
@@ -24,7 +27,7 @@
         <p class="text-center text-gray-600 mt-4">Belum ada data.</p>
     </div>
     {% else %}
-    <div class="columns-1 sm:columns-2 lg:columns-1 space-y-8 w-full">
+    <div class="columns-1 sm:columns-4 lg:columns-1">
         {% for item in items %}
             {% include 'card.html' with item=item %}
         {% endfor %}
