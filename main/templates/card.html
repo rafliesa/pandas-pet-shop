@@ -1,17 +1,17 @@
 {%load static%}
 <link rel="stylesheet" href="{% static 'css/card.css' %}">
-<div class="card">
-    <div class="header">
-        <div class="name">
+<div class="card" style="background-color: white;border: 0.1vw solid #ccc;border-radius: 1vw;box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.1);padding: 0vw;text-align: center;display: inline-flex;flex-direction: column;width: 90%;height: 30vh;width: 20vw;height: auto;margin: 1vw;transition: all 0.3s ease; padding-bottom: 2vw;">
+    <div class="header" style="background-color: wheat;border-radius: 1vw 1vw 0 0;padding: 1vw;">
+        <div class="name" style="font-size: 1vw;font-weight: bold;margin: 0;">
             <a href="{% url 'main:view_item' item.pk %}">
                 {{ item.name }}
             </a>
         </div>
     </div>
     <a href="{% url 'main:view_item' item.pk %}">
-        <div class="kontenerGambar">
+        <div class="kontenerGambar" style="display: flex ;justify-content: center;align-items: center; height: 15vh;overflow: hidden;">
             {% if item.photo %}
-            <img src="{{ item.photo.url }}">
+            <img src="{{ item.photo.url }}" style="width: 7vw;">
             {% else %}
             <p>No image available</p>
             {% endif %}
@@ -24,12 +24,12 @@
         <p class="stock">
             Stock: {{ item.stock }}
         </p>
-        <div class="buttons">
-            <a href="{% url 'main:edit_item' item.pk %}" class="ref">
+        <div class="buttons" style="margin-top: 1vw;display: flex;justify-content: space-evenly;">
+            <a href="{% url 'main:edit_item' item.pk %}" class="ref" style="flex: 1;background-color: #5c5eff;color: white;border: none;border-radius: 0.5vw;padding: 1vw;cursor: pointer;font-size: 1vw;transition: background-color 0.3s;width: 7vw;">
                 <button class="edit-button">Edit</button>
             </a>
             <a href="{% url 'main:delete_item' item.pk  %}" class="ref">
-                <button class="delete-button">Delete</button>
+                <button class="delete-button" style="flex: 1;background-color: #f44336;color: white;border: none;border-radius: 0.5vw;padding: 1vw;cursor: pointer;font-size: 1vw;transition: background-color 0.3s;width: 7vw;">Delete</button>
             </a>
         </div>
     </div>

@@ -3,35 +3,233 @@
 
 {% block meta %}
 <title>Panda's Pet Shop</title>
+<style>
+    .nama{
+        font-weight: bold;
+        margin-inline: 5px;
+        padding-top: 1;
+        border-radius: 30px;
+        font-size: 2vw;
+    }
+
+    @media (max-width: 768px) {
+    .nama {
+      font-size: 4vw; 
+    }
+
+    @media (max-width: 480px) {
+    .nama {
+      font-size: 4vw; 
+    }
+  }
+  }
+
+  .addItem{
+        font-weight: bold;
+        margin-inline: 5px;
+        padding-top: 2;
+        border-radius: 30px;
+        font-size: 2vw;
+        background-color: wheat;
+        padding-inline: 1vw;
+    }
+
+    @media (max-width: 768px) {
+    .addItem {
+      font-size: 4vw; 
+      padding-inline: 1vw;
+    }
+
+    @media (max-width: 480px) {
+    .addItem {
+      font-size: 4vw; 
+      padding-inline: 1vw;
+    }
+  }
+  }
+</style>
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
 {% endblock meta %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
-  <div class="p-2 mb-6 relative">
-</div>
+<div class="overflow-x-hidden bg-gray-100 flex flex-col">
     <div class="px-3 mb-4">
     </div>
-    <div class="flex justify-evenly mb-6 absolute">
-        <div>
-            <h2 class="font-bold px-3 py-2 mx-2 rounded-lg text-1rem">Welcome, {{user.username}}</h2>
+    <div style="padding-top: 5vw;margin-top: 5;">
+        <div style="margin-top: 5vh;margin-inline: 5vh;display: flex;">
+            <div>
+                <h2 class = "nama">Welcome, {{user.username}}</h2>
+            </div>
+            <button onclick="showModal();" style="width: 3vw;height: w3; background-color: wheat;margin-left: 2vw; border-radius: 5vw;font-weight: bold;font-size: 1vw;">
+                +
+            </button>
         </div>
-        <a href="{% url 'main:add_item' %}" class=" text-black font-bold py-2 px-4 rounded-lg" id="addItem">
-            +
-        </a>
+        <div id="item_cards" style="margin-top: 3vh;margin-inline: 5vh;"></div>
     </div>
-    
-    {% if not items  %}
-    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-        <img src="{% static 'image/731867.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-        <p class="text-center text-gray-600 mt-4">Belum ada data.</p>
-    </div>
-    {% else %}
-    <div class="columns-1 sm:columns-4 lg:columns-1">
-        {% for item in items %}
-            {% include 'card.html' with item=item %}
-        {% endfor %}
-    </div>
-    {% endif %}
+
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-y-auto">
+        <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-full max-w-md max-h-[75vh] overflow-y-auto mx-4">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Add new item
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="px-6 py-4 space-y-6">
+                <form id="itemForm">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Produk:</label>
+                        <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Nama produk" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="price" class="block text-sm font-medium text-gray-700">Harga:</label>
+                        <input type="number" min="100" step="100" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Harga" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="animal_type" class="block text-sm font-medium text-gray-700">Jenis Hewan:</label>
+                        <input type="text" id="animal_type" name="animal_type" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Jenis Hewan" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="stock" class="block text-sm font-medium text-gray-700">Stock:</label>
+                        <input type="number" id="stock" name="stock" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Stock" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi:</label>
+                        <textarea id="description" name="description" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Deskripsi" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="photo" class="block text-sm font-medium text-gray-700">Upload Photo:</label>
+                        <input type="file" id="photo" name="photo" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                    </div>
+                </form>
+            </div>`
+            <!-- Modal footer -->
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-black font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+                <button type="submit" id="submitItem" form="itemForm" class="text-black font-bold py-2 px-4 rounded-lg" style="background-color: wheat;">Save</button>
+            </div>
+        </div>
+    </div> 
 </div>
+
+
+
+<script>
+async function get_item(){
+    return fetch("{% url 'main:show_json' %}").then((res) => res.json());
+}
+
+async function refreshItem() {
+    document.getElementById("item_cards").innerHTML = "";
+    document.getElementById("item_cards").className = "";
+    const items = await get_item();
+    console.log(items);
+    let htmlString = "";
+    let classNameString = "";
+
+    if (items.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/731867.png' %}" alt="Sad Panda" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Belum ada product.</p>
+            </div>
+        `;
+    }
+    else {
+        classNameString = ""
+        items.forEach((item) => {
+            htmlString += `
+<div class="card" style="background-color: white;border: 0.1vw solid #ccc;border-radius: 1vw;box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.1);padding: 0vw;text-align: center;display: inline-flex;flex-direction: column;width: 90%;height: 20vh;width: 20vw;height: 50%;margin: 1vw;transition: all 0.3s ease; padding-bottom: 2vw;">
+    <div class="header" style="background-color: wheat;border-radius: 1vw 1vw 0 0;padding: 1vw;">
+        <div class="name" style="font-size: 1.5vw;font-weight: bold;margin: 0;">
+            <a href="view_item/${item.pk}">
+                ${item.fields.name}
+            </a>
+        </div>
+    </div>
+    <a href="view_item/${item.pk}">
+        <div class="kontenerGambar" style="display: flex ;justify-content: center;align-items: center; height: 12vw;overflow: hidden;min-height: 10vw">
+            <img src="media/${item.fields.photo}" style="width: 100%; height: auto; max-width: 500px; display: block; margin: 0 auto;">
+        </div>
+    </a>
+    <div>
+        <p class="price" style="font-size: 1.2vw;font-weight: bold;margin: 0;"">
+            Rp${ item.fields.price }
+        </p>
+        <p class="stock" style="font-size: 1vw;margin: 0;"">
+            Stock: ${ item.fields.stock }
+        </p>
+        <div class="buttons" style="display: flex; justify-content: center; gap: 0.5vw; margin-top: 1vw;">
+            <a href="edit-item/${item.pk}" class="button edit-button" style="flex: 0 1 auto; background-color: #5c5eff; color: white; border: none; border-radius: 0.3vw; padding: 0.5vw 1vw; cursor: pointer; font-size: 0.8vw; transition: all 0.3s ease; text-decoration: none; text-align: center; min-width: 4vw;">
+                Edit
+            </a>
+            <a href="delete/${item.pk}" class="button delete-button" style="flex: 0 1 auto; background-color: #f44336; color: white; border: none; border-radius: 0.3vw; padding: 0.5vw 1vw; cursor: pointer; font-size: 0.8vw; transition: all 0.3s ease; text-decoration: none; text-align: center; min-width: 4vw;">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+            `;
+        });
+    }
+    document.getElementById("item_cards").className = classNameString;
+    document.getElementById("item_cards").innerHTML = htmlString;
+}
+refreshItem();
+
+const modal = document.getElementById('crudModal');
+const modalContent = document.getElementById('crudModalContent');
+
+function showModal() {
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    modal.classList.remove('hidden'); 
+    setTimeout(() => {
+    modalContent.classList.remove('opacity-0', 'scale-95');
+    modalContent.classList.add('opacity-100', 'scale-100');
+    }, 50); 
+}
+
+function hideModal() {
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    modalContent.classList.remove('opacity-100', 'scale-100');
+    modalContent.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+    modal.classList.add('hidden');
+    }, 150); 
+}
+
+document.getElementById("cancelButton").addEventListener("click", hideModal);
+document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+
+function addItem() {
+    fetch("{% url 'main:add_item' %}", {
+        method: "POST",
+        body: new FormData(document.querySelector('#itemForm')),
+    })
+    .then(response => refreshItem())
+
+    document.getElementById("itemForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+}
+
+document.getElementById("itemForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addItem();
+})
+</script>
 {% endblock content %}

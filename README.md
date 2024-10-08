@@ -268,3 +268,57 @@ Setelah itu saya melakukan iterasi items yang telah ditambahkan ke dalam berkas 
 Pertama, saya membuat file navbar.html pada direktori root/templates/. Setelah itu, saya mengimplementasikan navbar dengan tag "nav" yang akan diisi dengan berbagai element div untuk shortcut yang sesuai dengan kebutuhan. Untuk membuatnya menjadi resposnif, saya menggunakan tailwind untuk menambahkan properti tertentu yang bisa diletakan langsung di dalam atribut class. Salah satu propertinya adalah "hidden md:flex items-center" yang akan menyembuyikan elemen jika ukuran layar dibawah ukuran medium (768px). Kebalikan dari hal tersebut, saya juga membuat hamburger button yang hanya akan munucul jika ukuran layar dibawah ukuran medium. Jika ditekan, hamburger button tersebut akan menampilkan shortcut dalam bentuk stack.
 
 Untuk menambahkan navbar tersebut ke tiap template yang memerlukannya, saya menambahkan templating {% include 'navbar.html' %}.
+
+# Tugas 6
+
+## 1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+Beberapa manfaat dari penggunaan JavaScript adalah:
+1. Interaksi menjadi lebih dinamis
+Penggunaan JavaScript memungkinkan interaksi pada aplikasi web secara langsung tanpa perlu memuat ulang seluruh halaman (_refresh_).
+2. Manipulasi dokumen HTML secara langsung
+Hal ini memungkinkan pengembang untuk mengubah, menghapus, atau menambah _element_ pada dokumen HTML yang sedang ditampilkan tanpa perlu memuat ulang seluruh halaman (_refresh_).
+3. Asynchronous Processing (AJAX)
+Dengan teknologi seperti AJAX, JavaScript memungkinkan pengambilan data dari server secara asinkron tanpa memuat ulang halaman. Ini sangat membantu dalam membuat aplikasi yang cepat dan responsif.
+
+## 2. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+Penggunaan await dimaksudkan agar JavaScript menunggu hasil pengambilan data, baik berhasil maupun gagal, dari fungsi fetch() selesai. 
+
+**Apa yang akan terjadi jika kita tidak menggunakan await?**
+Program mungkin akan mengalami masalah pemrosesan data, seperti mencoba mengakses data yang belum tersedia atau menggunakan objek yang belum terdefinisi.
+
+Alternatif lain adalah dengan menggunakan ".then()"
+    get_item().then((items) => {
+    // do something
+    });
+
+## 3. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+Penggunaan decorator csrf_exempt membuat Django tidak perlu mengecek keberadaan csrf_token pada POST request yang dikirimkan ke fungsi ini. Decorator tersebut digunakan karena permintaan AJAX sering kali tidak dapat menyertakan token CSRF dengan cara yang sama seperti form HTML biasa. Ini bisa menyebabkan permintaan AJAX POST ditolak oleh Django.
+
+## 4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+Karena pengguna yang jahat dapat saja mengirimkan permintaan langsung ke server tanpa melalui frontend, misalnya dengan menggunakan Postman. Namun, pembersihan data input pengguna yang dilakukan di frontend juga penting dilakukan sebagai keamanan lapis pertama.
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+#### Mengubah kode cards data mood agar dapat mendukung AJAX GET.
+Pada views, saya mengubah fungsi add_item pada view dengan menspesifikasikan penerimaan masing-masing fields. Lalu tambahkan decorator "@csrf_exempt", "@require_POST" untuk fungsi tersebut.
+
+Lalu, karena kita akan mendapatkan objek melalui endpoint json, saya mengubah variabel data di fungsi show_xml dan show_json menjadi bedasarkan user.
+
+Setelah itu, saya menghapus bagian yang mengiterasi produk pada main.html menggantikannya dengan element div baru sebagai tempat untuk card yang akan diiterasi dengan menggunakan fetch API. Div tersebut akan saya referensikan sebagai card_div kedepannya.   
+
+Lalu, saya membuat sebuah fungsi JavaScript yang menggunakan fetch API yang akan mengambil data json secara _asynchronous_. Setelah di-fetch, saya tambahkan fungsi then() untuk mengubah data json menjadi object javascript.
+Potongan kode:
+    async function addItem(){
+        return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+    }
+
+Untuk menampilkan cardnya, saya membuat fungsi JavaScript yang akan menambahkan element di card_div dengan setiap card yang dimiliki user. Card tersebut diperoleh dengan memanggil fungsi yang telah didefinisikan di atas. Fungsi ini dapat mengubah berkas HTML tanpa perlu melakukan refresh pada page. Sehingga setiap kali ada perubahan pada database, kita akan memanggil fungsi ini.
+
+#### Membuat sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.
+Pertama, saya membuat suatu div HTML dibawah card_div yang berfungsi sebagai tampilan serta form untuk menambahkan product. Form tersebut dispesifikasikan inputnya yang harus sesuai dengan field pada model. Div ini akan kita sebut sebagai modal kedepannya.
+
+Setelah itu, saya membuat suatu tombol yang akan terhubung dengan fungsi untuk menambahkan modal. Hal tersebut dapat diimplementasikan dengan menggunakan atribut onclick='fungsi'. Tombol tersebut akan memodifikasi dokumen HTML untuk menampilkan atau menyembunyikan modal jika ditekan.
+
+Setelah itu, saya membuat fungsi yang akan mengirimkan form pada modal lalu mengaitkannya dengan tombol submit pada form modal.
+
+Selain itu, tombol submit juga akan terhubung dengan fungsi add_item yang telah didefinisikan di atas. Sehingga setiap kita menambahkan item, dokumen HTML dimodifikasi sehingga dokumen tersebut menyertakan card item baru dari item yang baru kita buat tanpa perlu refresh page.
