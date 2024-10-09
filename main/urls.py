@@ -20,3 +20,6 @@ urlpatterns = [
     path('delete/<uuid:id>', delete_item, name='delete_item'),
     path('view_item/<uuid:id>', view_item, name='view_item'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
